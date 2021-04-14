@@ -38,14 +38,16 @@ Flag lukko
   default:      True
   manual:       True
 
-
-library
-    default-language: Haskell2010
+common warnings
     ghc-options: -Wall -Wcompat -Wnoncanonical-monad-instances
     if impl(ghc < 8.8)
       ghc-options: -Wnoncanonical-monadfail-instances
       if impl(ghc >=8.10)
         ghc-options: -Wunused-packages
+
+library
+    import: warnings
+    default-language: Haskell2010
 
     hs-source-dirs:   src
     exposed-modules:
@@ -234,15 +236,10 @@ library
 
 
 executable cabal
-    main-is:        Main.hs
+    import: warnings
+    main-is: Main.hs
     hs-source-dirs: main
     default-language: Haskell2010
-    ghc-options: -Wall -Wcompat -Wnoncanonical-monad-instances
-    if impl(ghc < 8.8)
-      ghc-options: -Wnoncanonical-monadfail-instances
-      if impl(ghc >=8.10)
-        ghc-options: -Wunused-packages
-
 
     ghc-options: -rtsopts -threaded
 
@@ -260,88 +257,82 @@ executable cabal
 -- Small, fast running tests.
 --
 Test-Suite unit-tests
+    import: warnings
     default-language: Haskell2010
-    ghc-options: -Wall -Wcompat -Wnoncanonical-monad-instances -threaded
-    if impl(ghc < 8.8)
-        ghc-options: -Wnoncanonical-monadfail-instances
+    ghc-options: -rtsopts -threaded
 
-      if impl(ghc >=8.10)
-        ghc-options: -Wunused-packages
+    type: exitcode-stdio-1.0
+    main-is: UnitTests.hs
+    hs-source-dirs: tests
+    other-modules:
+      UnitTests.Distribution.Client.ArbitraryInstances
+      UnitTests.Distribution.Client.BuildReport
+      UnitTests.Distribution.Client.Targets
+      UnitTests.Distribution.Client.Get
+      UnitTests.Distribution.Client.Glob
+      UnitTests.Distribution.Client.GZipUtils
+      UnitTests.Distribution.Client.Init
+      UnitTests.Distribution.Client.Store
+      UnitTests.Distribution.Client.Tar
+      UnitTests.Distribution.Client.TreeDiffInstances
+      UnitTests.Distribution.Client.UserConfig
+      UnitTests.Distribution.Client.ProjectConfig
+      UnitTests.Distribution.Client.JobControl
+      UnitTests.Distribution.Client.IndexUtils.Timestamp
+      UnitTests.Distribution.Client.InstallPlan
+      UnitTests.Distribution.Solver.Modular.Builder
+      UnitTests.Distribution.Solver.Modular.RetryLog
+      UnitTests.Distribution.Solver.Modular.Solver
+      UnitTests.Distribution.Solver.Modular.DSL
+      UnitTests.Distribution.Solver.Modular.DSL.TestCaseUtils
+      UnitTests.Distribution.Solver.Modular.WeightedPSQ
+      UnitTests.Distribution.Solver.Types.OptionalStanza
+      UnitTests.Options
+      UnitTests.TempTestDir
 
-  type: exitcode-stdio-1.0
-  main-is: UnitTests.hs
-  hs-source-dirs: tests
-  other-modules:
-    UnitTests.Distribution.Client.ArbitraryInstances
-    UnitTests.Distribution.Client.BuildReport
-    UnitTests.Distribution.Client.Targets
-    UnitTests.Distribution.Client.Get
-    UnitTests.Distribution.Client.Glob
-    UnitTests.Distribution.Client.GZipUtils
-    UnitTests.Distribution.Client.Init
-    UnitTests.Distribution.Client.Store
-    UnitTests.Distribution.Client.Tar
-    UnitTests.Distribution.Client.TreeDiffInstances
-    UnitTests.Distribution.Client.UserConfig
-    UnitTests.Distribution.Client.ProjectConfig
-    UnitTests.Distribution.Client.JobControl
-    UnitTests.Distribution.Client.IndexUtils.Timestamp
-    UnitTests.Distribution.Client.InstallPlan
-    UnitTests.Distribution.Solver.Modular.Builder
-    UnitTests.Distribution.Solver.Modular.RetryLog
-    UnitTests.Distribution.Solver.Modular.Solver
-    UnitTests.Distribution.Solver.Modular.DSL
-    UnitTests.Distribution.Solver.Modular.DSL.TestCaseUtils
-    UnitTests.Distribution.Solver.Modular.WeightedPSQ
-    UnitTests.Distribution.Solver.Types.OptionalStanza
-    UnitTests.Options
-    UnitTests.TempTestDir
-  build-depends:
-        array,
-        base,
-        bytestring,
-        cabal-install,
-        cabal-install-solver,
-        Cabal,
-        Cabal-tree-diff,
-        Cabal-QuickCheck,
-        containers,
-        directory,
-        filepath,
-        mtl,
-        network-uri >= 2.6.2.0 && <2.6.4.0,
-        random,
-        tar,
-        time,
-        zlib,
-        tasty >= 1.2.3 && <1.4,
-        tasty-golden >=2.3.1.1 && <2.4,
-        tasty-quickcheck,
-        tasty-hunit >= 0.10,
-        tree-diff,
-        QuickCheck >= 2.14 && <2.15
+    build-depends:
+          array,
+          base,
+          bytestring,
+          cabal-install,
+          cabal-install-solver,
+          Cabal,
+          Cabal-tree-diff,
+          Cabal-QuickCheck,
+          containers,
+          directory,
+          filepath,
+          mtl,
+          network-uri >= 2.6.2.0 && <2.6.4.0,
+          random,
+          tar,
+          time,
+          zlib,
+          tasty >= 1.2.3 && <1.4,
+          tasty-golden >=2.3.1.1 && <2.4,
+          tasty-quickcheck,
+          tasty-hunit >= 0.10,
+          tree-diff,
+          QuickCheck >= 2.14 && <2.15
 
 
 -- Tests to run with a limited stack and heap size
 --
 Test-Suite memory-usage-tests
-    default-language: Haskell2010
-    ghc-options: -Wall -Wcompat -Wnoncanonical-monad-instances
-    if impl(ghc < 8.8)
-      ghc-options: -Wnoncanonical-monadfail-instances
-      if impl(ghc >=8.10)
-        ghc-options: -Wunused-packages
-
-  ghc-options: -threaded
-  ghc-options: "-with-rtsopts=-M4M -K1K"
+  import: warnings
   type: exitcode-stdio-1.0
   main-is: MemoryUsageTests.hs
   hs-source-dirs: tests
+  default-language: Haskell2010
+
+  ghc-options: -threaded "-with-rtsopts=-M4M -K1K"
+
   other-modules:
     UnitTests.Distribution.Solver.Modular.DSL
     UnitTests.Distribution.Solver.Modular.DSL.TestCaseUtils
     UnitTests.Distribution.Solver.Modular.MemoryUsage
     UnitTests.Options
+
   build-depends:
         base,
         Cabal,
@@ -355,18 +346,13 @@ Test-Suite memory-usage-tests
 -- Integration tests that use the cabal-install code directly
 -- but still build whole projects
 test-suite integration-tests2
-    default-language: Haskell2010
-    ghc-options: -Wall -Wcompat -Wnoncanonical-monad-instances
-    if impl(ghc < 8.8)
-      ghc-options: -Wnoncanonical-monadfail-instances
-      if impl(ghc >=8.10)
-        ghc-options: -Wunused-packages
-
-  ghc-options: -threaded
+  import: warnings
+  ghc-options: -rtsopts -threaded
   type: exitcode-stdio-1.0
   main-is: IntegrationTests2.hs
   hs-source-dirs: tests
-  other-modules:
+  default-language: Haskell2010
+
   build-depends:
         base,
         bytestring,
@@ -381,17 +367,12 @@ test-suite integration-tests2
         tagged
 
 test-suite long-tests
-    default-language: Haskell2010
-    ghc-options: -Wall -Wcompat -Wnoncanonical-monad-instances
-    if impl(ghc < 8.8)
-      ghc-options: -Wnoncanonical-monadfail-instances
-      if impl(ghc >=8.10)
-        ghc-options: -Wunused-packages
-
-  ghc-options: -threaded
+  import: warnings
+  ghc-options: -rtsopts -threaded
   type: exitcode-stdio-1.0
   hs-source-dirs: tests
   main-is: LongTests.hs
+  default-language: Haskell2010
 
   other-modules:
     UnitTests.Distribution.Client.ArbitraryInstances
