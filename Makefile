@@ -67,24 +67,6 @@ buildinfo-fields-reference : phony
 	cabal build --builddir=dist-newstyle-bi --project-file=cabal.project.buildinfo buildinfo-reference-generator
 	$$(cabal-plan list-bin --builddir=dist-newstyle-bi buildinfo-reference-generator) buildinfo-reference-generator/template.zinza | tee $@
 
-# cabal-install.cabal file generation
-
-cabal-install-cabal : phony cabal-install/cabal-install.cabal.dev cabal-install/cabal-install.cabal.prod
-
-cabal-install/cabal-install.cabal.dev : cabal-install/cabal-install.cabal.zinza
-	cabal v2-run --builddir=dist-newstyle-meta --project-file=cabal.project.meta gen-cabal-install-cabal -- True cabal-install/cabal-install.cabal.zinza cabal-install/cabal-install.cabal.dev
-
-cabal-install/cabal-install.cabal.prod : cabal-install/cabal-install.cabal.zinza
-	cabal v2-run --builddir=dist-newstyle-meta --project-file=cabal.project.meta gen-cabal-install-cabal -- False cabal-install/cabal-install.cabal.zinza cabal-install/cabal-install.cabal.prod
-
-cabal-install-prod : cabal-install/cabal-install.cabal.prod
-	cp cabal-install/cabal-install.cabal.prod cabal-install/cabal-install.cabal
-
-cabal-install-dev : cabal-install/cabal-install.cabal.dev
-	cp cabal-install/cabal-install.cabal.dev cabal-install/cabal-install.cabal
-	@echo "tell git to ignore changes to cabal-install.cabal:"
-	@echo "git update-index --assume-unchanged cabal-install/cabal-install.cabal"
-
 # analyse-imports
 analyse-imports : phony
 	find Cabal/src cabal-install/src -type f -name '*.hs' | xargs cabal v2-run --builddir=dist-newstyle-meta --project-file=cabal.project.meta analyse-imports --
