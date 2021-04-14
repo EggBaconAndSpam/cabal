@@ -193,10 +193,6 @@ library
         Distribution.Client.Win32SelfUpgrade
         Distribution.Client.World
 
-    hs-source-dirs: cabal-install-solver/src-assertion
-    exposed-modules:
-        Distribution.Client.Utils.Assertion
-
     build-depends: cabal-install-solver
 
     other-modules:
