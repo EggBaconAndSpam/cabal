@@ -97,7 +97,7 @@ doctest :
 
 # This is not run as part of validate.sh (we need hackage-security, which is tricky to get).
 doctest-cli :
-	doctest -D__DOCTEST__ --fast cabal-install/src cabal-install/cabal-install-solver/src cabal-install/cabal-install-solver/src-assertion
+	doctest -D__DOCTEST__ --fast cabal-install/src cabal-install-solver/src cabal-install-solver/src-assertion
 
 # tests
 

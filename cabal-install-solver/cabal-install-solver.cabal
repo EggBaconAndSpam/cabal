@@ -18,7 +18,7 @@ build-type:    Simple
 source-repository head
   type:     git
   location: https://github.com/haskell/cabal/
-  subdir:   cabal-install/cabal-install-solver
+  subdir:   cabal-install-solver
 
 flag debug-expensive-assertions
   description: Enable expensive assertions for testing or debugging
