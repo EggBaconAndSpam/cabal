@@ -430,7 +430,7 @@ step_cli_tests() {
 print_header "cabal-install: tests"
 
 # this are sorted in asc time used, quicker tests first.
-CMD="$($CABALPLANLISTBIN cabal-install:test:solver-quickcheck) $TESTSUITEJOBS --hide-successes"
+CMD="$($CABALPLANLISTBIN cabal-install:test:long-tests) $TESTSUITEJOBS --hide-successes"
 (cd cabal-install && timed $CMD) || exit 1
 
 # This doesn't work in parallel either
