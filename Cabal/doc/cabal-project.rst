@@ -154,6 +154,10 @@ version control which supports the following fields:
 - :pkg-field:`source-repository:tag`
 - :pkg-field:`source-repository:subdir`
 
+Note that ``source-repository-package` (in contrast to :pkg-section:`source-repository`)
+allows specifying a list of subdirs, which allows us to import multiple cabal
+files in a single stanza.
+
 A simple example is shown below:
 
 .. code-block:: cabal
@@ -165,11 +169,14 @@ A simple example is shown below:
         location: https://github.com/hvr/HsYAML.git
         tag: e70cf0c171c9a586b62b3f75d72f1591e4e6aaa1
 
+    -- We can import both cborg/cborg.cabal and cbor-tool/cbor-tool.cabal
+    -- in one stanza.
     source-repository-package
         type: git
         location: https://github.com/well-typed/cborg
         tag: 3d274c14ca3077c3a081ba7ad57c5182da65c8c1
-        subdir: cborg
+        subdir: cborg cbor-tool
+
 
 Global configuration options
 ----------------------------
